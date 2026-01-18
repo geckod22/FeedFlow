@@ -10,6 +10,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/geckod22/FeedFlow?label=last%20stable)
 ![Supported Python Versions](https://img.shields.io/badge/Python-3.13%20|%20or%20higher-3776AB?logo=python&logoColor=fff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+![PyPi package](https://img.shields.io/badge/PyPi-3776AB?logo=pypi&logoColor=fff)
 ![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)
 ![Coverage](coverage.svg) ![Tests](tests.svg)
 </div>
