@@ -39,11 +39,7 @@ FeedFlow is a `stdio`-based [FastMCP](https://github.com/mcp-client/fastmcp) ser
 
 ## 📦 Installation & 📋 Usage
 
-### 🚀 Quick Start (No Download Required)
-You can run FeedFlow directly without cloning the repository using `uvx`:
-```bash
-uvx --from git+[https://github.com/geckod22/FeedFlow](https://github.com/geckod22/FeedFlow) feedflow
-```
+FeedFlow is designed to run as an MCP server. You don't need to install it manually; uv handles everything.
 
 ### 🛠️ Developer Setup
 1.  **Clone the repository:**
@@ -61,7 +57,19 @@ uvx --from git+[https://github.com/geckod22/FeedFlow](https://github.com/geckod2
 
 ## ⚙️ MCP Client configuration
 
-Fast implementation (No Download):
+### 🚀 Quick Start (without cloning the repository)
+
+you can run FeedFlow directly from PyPi
+
+```json
+"feedflow": {
+  "command": "uvx",
+  "args": ["feedflow"]
+}
+```
+
+or if you use Gemini CLI or other terminal-based clients, you can run it from github:
+
 ```json
 "feedflow": {
   "command": "uvx",
@@ -69,16 +77,19 @@ Fast implementation (No Download):
 }
 ```
 
-Standard config:
+### 🔧 Standard config\DEV:
+if you cloned the repo on your machine
+
 ```json
     "feedflow": {
 		"command": "uv",
 		"args": [
         "--directory", "full_path_to_FeedFlow_main_folder",
-        "run", "feedflow\\main.py"
+        "run", "feedflow"
     	]
     }
 ```
+
 | Client                 | DOC     |
 | ---------------------- | ------- |
 | Claude Desktop         | <a href="https://code.visualstudio.com/docs/copilot/customization/mcp-servers#_other-options-to-add-an-mcp-server">here</a>    |
