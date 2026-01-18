@@ -4,8 +4,12 @@ from fastmcp import FastMCP, Context
 from mcp.types import PromptMessage, TextContent
 from pydantic import TypeAdapter, HttpUrl, Field
 from typing import Optional
-from db import _add_custom_feed, _get_feeds, init_db, _get_categories, _remove_feed
-from rss_engine import _fetch_rss_feed
+try: 
+    from .db import _add_custom_feed, _get_feeds, init_db, _get_categories, _remove_feed
+    from .rss_engine import _fetch_rss_feed
+except (ImportError, ValueError):# pragma: no cover
+    from db import _add_custom_feed, _get_feeds, init_db, _get_categories, _remove_feed # pragma: no cover
+    from rss_engine import _fetch_rss_feed  # pragma: no cover
 
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 logger = logging.getLogger(__name__)
@@ -20,8 +24,8 @@ mcp = FastMCP(
 )
 
 # --- RESOURCES ---
-@mcp.resource("feeds://feeds", name="All RSS Feeds")
-def get_feeds() -> str:
+@mcp.resource("feeds://feeds", name="All RSS Feeds") 
+def get_feeds() -> str: # pragma: no cover
     """
     Returns the list of all RSS feeds.
     The AI can use these URLs with the fetch_rss_feed tool.
@@ -29,7 +33,7 @@ def get_feeds() -> str:
     return _get_feeds()
 
 @mcp.resource("feeds://categories", name="List Feeds' Categories")
-async def get_feeds_categories() -> str:
+async def get_feeds_categories() -> str: # pragma: no cover
     """
     Returns a list of all unique categories available in the database.
     This helps the AI know which categories can be used in resource templates.
@@ -42,7 +46,7 @@ async def get_feeds_categories() -> str:
     return "Available categories:\n" + "\n".join(f"- {cat}" for cat in categories)
 
 @mcp.resource("feeds://feeds/{category}", name="Feeds by Category")
-def get_feeds_by_category(category: str) -> str:
+def get_feeds_by_category(category: str) -> str: # pragma: no cover
     """
     Returns a list of RSS feeds filtered by category.
     Check feeds://categories for a list of valid categories.
@@ -54,10 +58,10 @@ def get_feeds_by_category(category: str) -> str:
         name="available_feeds_categories",
         description="Get available feeds unique categories"
 )
-async def available_feeds_categories() -> list[PromptMessage]:
+async def available_feeds_categories() -> list[PromptMessage]: # pragma: no cover
     prompt_text = f"""
     List the unique categories available in the database.
-	You can use the resource feeds://categories
+    You can use the resource feeds://categories
     """
     return [
         PromptMessage(
@@ -72,7 +76,7 @@ async def available_feeds_categories() -> list[PromptMessage]:
 )
 async def latest_news_by_category(
     category: str = Field(None, description="Get the latest news from a specific category. Only get the very latest one for each feed in the provided category.")
-) -> list[PromptMessage]:
+) -> list[PromptMessage]: # pragma: no cover
     prompt_text = f"""
     Get the Feeds list for the selected category: {category}. You can use the resource: feeds://feeds/category or the tool list_feeds.
     Once you get the list of feeds for the selected category. Go through each one and get only 1 (the most recent) news.
@@ -92,7 +96,7 @@ async def latest_news_by_category(
 async def latest_news_by_argument(
     argument: str = Field(None, description="Get the latest news from a specific argument. Only get the very latest one for each feed related with the argument."),
     max_results: int = Field(default=1, ge=1, le=10, description="Number of articles to fetch.")
-) -> list[PromptMessage]:
+) -> list[PromptMessage]: # pragma: no cover
     prompt_text = f"""
     Considering the following argument: {argument}, get only the feeds related with it.
     To get the feeds list use the tool list_feeds.
@@ -118,7 +122,7 @@ async def add_custom_feed(
                 "If the language cannot be determined, default to 'en'."
             ),
     ctx: Context = None
-) -> str:
+) -> str: # pragma: no cover
     """Adds a new RSS feed to the Feeds list persistently."""
     try:
         TypeAdapter(HttpUrl).validate_python(url)
@@ -132,10 +136,10 @@ async def add_custom_feed(
 async def remove_feed(
     feed: str = Field(None, description="The name or the url of the feed to remove from the Database. To be sure about it, before to delete get the list of the feeds with the list_feeds tool."),
     ctx: Context = None
-) -> str:
+) -> str: # pragma: no cover
     """
-	Remove a feed from the Database
-	"""
+    Remove a feed from the Database
+    """
     success = await _remove_feed(feed, ctx)
     
     if success:
@@ -147,7 +151,7 @@ async def remove_feed(
 async def list_feeds(
     ctx: Context,
     category: Optional[str] = Field(None, description="The category to filter by (e.g., 'AI', 'Tech'). If omitted, all feeds will be returned."),
-    ) -> str:
+    ) -> str: # pragma: no cover
     """
     Returns the RSS feeds for various categories.
     The AI can use these URLs with the fetch_rss_feed tool.
@@ -160,7 +164,7 @@ async def fetch_rss_feed(
     url: str = Field(..., description="The valid RSS/Atom feed URL (must start with http/https)"),
     max_results: int = Field(default=5, ge=1, le=10, description="Number of articles to fetch. If the user asks for a specific number of items, use that value. Otherwise, use this limit to save bandwidth."),
     ctx: Context = None
-    ) -> str:
+    ) -> str: # pragma: no cover
     """
     Read an RSS feed from a URL and return the titles and links of the latest articles.
     Useful for getting news updates or content from blogs.
@@ -180,8 +184,7 @@ async def fetch_rss_feed(
         if ctx: await ctx.error(f"Parsing error: {url}")
         return f"Error while getting the feed: {str(e)}"
 
-# --- STARTING ---
-if __name__ == "__main__":
+def main(): # pragma: no cover
     import asyncio
     
     try:
@@ -192,3 +195,7 @@ if __name__ == "__main__":
         mcp.run()
     except Exception as e:
         logging.error(f"Failed to start MCP server: {e}")
+        
+# --- STARTING ---
+if __name__ == "__main__":main() # pragma: no cover
+

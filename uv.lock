@@ -434,7 +434,7 @@ wheels = [
 [[package]]
 name = "feedflow"
 version = "1.0.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },
     { name = "fastmcp" },

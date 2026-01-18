@@ -21,4 +21,4 @@ wheels/
 htmlcov/
 .coverage
 
-app/data/feeds.db
+TODO.md

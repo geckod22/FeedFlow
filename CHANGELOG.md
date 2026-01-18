@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changed
+- **Database Persistence**: Moved SQLite database location to system-standard local app data (using `platformdirs`) to ensure data persistence across updates.
+- **Project Structure**: Refactored the codebase into a standard installable Python package (`feedflow`).
+- **Distribution**: Added support for `uvx` and global installation via `project.scripts` in `pyproject.toml`.
+- **Documentation**: Updated `README.md` with installation instructions and modern badges.
+
 ---
 
 ## [1.0.0] - 2026-01-17

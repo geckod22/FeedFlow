@@ -1,3 +1,7 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "feedflow"
 version = "1.0.0"
@@ -21,3 +25,6 @@ dev = [
     "pytest-mock>=3.15.1",
     "respx>=0.22.0",
 ]
+
+[project.scripts]
+feedflow = "feedflow.main:main"

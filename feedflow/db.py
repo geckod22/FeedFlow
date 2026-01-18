@@ -1,11 +1,19 @@
 # db.py
 import aiosqlite
+import os
+from platformdirs import user_data_dir
 from pathlib import Path
 from fastmcp import Context
-from utils import detect_actual_language
+try:
+	from .utils import detect_actual_language
+except (ImportError, ValueError):# pragma: no cover
+    from utils import detect_actual_language# pragma: no cover
 
-BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "data" / "feeds.db"
+default_dir = Path(user_data_dir('feedflow', appauthor=False))
+data_dir = Path(os.getenv("FEEDFLOW_DATA_DIR", default_dir))
+data_dir.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = data_dir / "feedflow.db"
 
 async def init_db():
     """

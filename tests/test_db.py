@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock
 # Mark all tests in this module as asyncio
 pytestmark = pytest.mark.asyncio
 
-import app.db as db_module
+import feedflow.db as db_module
 
 @pytest.fixture
 async def setup_database(tmp_path, monkeypatch):
@@ -20,7 +20,7 @@ async def setup_database(tmp_path, monkeypatch):
     temp_db_path = tmp_path / "test_feeds.db"
     
     # Use monkeypatch to temporarily change the DB_PATH in the db module
-    monkeypatch.setattr('app.db.DB_PATH', temp_db_path)
+    monkeypatch.setattr('feedflow.db.DB_PATH', temp_db_path)
     
     # Initialize the database schema
     await db_module.init_db()

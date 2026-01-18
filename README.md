@@ -1,14 +1,26 @@
-<img src="app/logo.png" alt="FeedFlow Logo" height="100" />
+<p align="center">
+	<img src="app/logo.png" alt="FeedFlow Logo" height="100" />
+</p>
+<div align="center">
+	<h1>FeedFlow MCP Server</h1>
+</div>
 
-# FeedFlow MCP Server
+<div align="center">
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/geckod22/FeedFlow?label=last%20stable)
 ![Supported Python Versions](https://img.shields.io/badge/Python-3.13%20|%20or%20higher-3776AB?logo=python&logoColor=fff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
-
 ![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)
-![Coverage](badges/coverage.svg)
+![Coverage](coverage.svg)
+</div>
+
+---
+<div align="center">
 
 FeedFlow is a `stdio`-based [FastMCP](https://github.com/mcp-client/fastmcp) server designed for managing and fetching articles from RSS feeds. It allows you to add, list, and read from multiple RSS feed sources directly through MCP tool calls, using a persistent SQLite database.
+</div>
+
+---
 
 ## Features
 
@@ -16,7 +28,7 @@ FeedFlow is a `stdio`-based [FastMCP](https://github.com/mcp-client/fastmcp) ser
 - **Categorize Feeds**: Assign a category and language to each feed for better organization.
 - **List Feeds**: Retrieve a list of all stored feeds, or filter them by category.
 - **Fetch Articles**: Get the latest articles from any given RSS feed URL, with summaries.
-- **SQLite**: All feed data is stored in a local SQLite database.
+- **SQLite**: All feed data is stored in a local SQLite database (windows: %LOCALAPPDATA%).
 - **Language Detection**: Automatically detects the language of a feed's content if not specified.
 - **Asynchronous**: Built with `asyncio`, `aiosqlite`, and `httpx` for non-blocking I/O.
 
@@ -41,17 +53,23 @@ FeedFlow is a `stdio`-based [FastMCP](https://github.com/mcp-client/fastmcp) ser
 
 ## MCP Client configuration
 
+Fast implementation (No Download):
+```json
+"feedflow": {
+  "command": "uvx",
+  "args": ["--from", "git+https://github.com/geckod22/FeedFlow", "feedflow"]
+}
+```
+
 Standard config:
 ```json
-	"feedflow": {
+    "feedflow": {
 		"command": "uv",
 		"args": [
-			"run",
-			"--with",
-			"fastmcp,feedparser,langdetect,httpx,aiosqlite",
-			"Full path to FeedFlow\\app\\main.py"
-		]
-	}
+        "--directory", "full_path_to_FeedFlow_main_folder",
+        "run", "feedflow\\main.py"
+    	]
+    }
 ```
 | Client                 | DOC     |
 | ---------------------- | ------- |
@@ -108,7 +126,7 @@ Fetches and displays the latest articles from a given RSS feed URL.
 from the project folder run:
 
 ```bash
-npx @modelcontextprotocol/inspector uv run --with httpx --with aiosqlite --with fastmcp --with feedparser --with langdetect python app/main.py
+npx @modelcontextprotocol/inspector uv run --with httpx --with aiosqlite --with fastmcp --with feedparser --with langdetect python feedflow/main.py
 
 ```
 
@@ -129,7 +147,7 @@ pytest --cov=. --cov-report=html
 for coverage badge
 
 ```bash
-pytest --cov=. --cov-report=html --local-badge-output-dir badges/
+pytest --cov=. --cov-report=html --local-badge-output-dir .
 ```
 
 ## License

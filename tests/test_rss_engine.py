@@ -1,7 +1,7 @@
 # tests/tests_rss_engine.py
 import pytest
 import httpx
-from app.rss_engine import _fetch_rss_feed
+from feedflow.rss_engine import _fetch_rss_feed
 
 pytestmark = pytest.mark.asyncio
 
