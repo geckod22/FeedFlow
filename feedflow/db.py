@@ -1,11 +1,19 @@
 # db.py
 import aiosqlite
+import os
+from platformdirs import user_data_dir
 from pathlib import Path
 from fastmcp import Context
-from utils import detect_actual_language
+try:
+	from .utils import detect_actual_language
+except (ImportError, ValueError):# pragma: no cover
+    from utils import detect_actual_language# pragma: no cover
 
-BASE_DIR = Path(__file__).resolve().parent
-DB_PATH = BASE_DIR / "data" / "feeds.db"
+default_dir = Path(user_data_dir('feedflow', appauthor=False))
+data_dir = Path(os.getenv("FEEDFLOW_DATA_DIR", default_dir))
+data_dir.mkdir(parents=True, exist_ok=True)
+
+DB_PATH = data_dir / "feedflow.db"
 
 async def init_db():
     """
@@ -35,7 +43,7 @@ async def _get_categories(ctx: Context = None) -> list[str]:
             rows = await cursor.fetchall()
             return [row[0] for row in rows]
 
-async def _add_custom_feed(name: str, url: str, category: str, lang: str, ctx: Context = None) -> str:
+async def _add_feed(name: str, url: str, category: str, lang: str, ctx: Context = None) -> str:
     """
     Adds a new RSS feed to the Feed list persistently.
     Returns a success or error formatted string message.
@@ -129,7 +137,7 @@ async def _get_feeds(ctx: Context = None, category: str = None) -> str:
             if category:
                 return f"No feeds found in the '{category}' category."
             else:
-             return "No feeds configured. Use the 'add_custom_feed' tool to add some!" 
+             return "No feeds configured. Use the 'add_feed' tool to add some!" 
 
         output = "CURRENT FEEDS:\n"
         count = 0

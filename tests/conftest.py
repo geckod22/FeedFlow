@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 
 # Add 'app' folder to the path system while testing
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../app')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../feedflow')))
 
 @pytest.fixture
 def valid_rss_xml():
@@ -49,11 +49,11 @@ def mock_ctx():
 
 @pytest.fixture
 def mock_get_feeds_error(mocker):
-    return mocker.patch("app.db.aiosqlite.connect", side_effect=Exception("DB Connection Lost"))
+    return mocker.patch("feedflow.db.aiosqlite.connect", side_effect=Exception("DB Connection Lost"))
 
 @pytest.fixture
 def mock_db_error(mocker):
-    return mocker.patch("app.db.aiosqlite.connect", side_effect=Exception("DB Connection Lost"))
+    return mocker.patch("feedflow.db.aiosqlite.connect", side_effect=Exception("DB Connection Lost"))
 
 class AsyncCM:
     def __init__(self, obj):
@@ -76,7 +76,7 @@ def mock_get_feeds(mocker):
         
         # La Patch: aiosqlite.connect deve restituire un oggetto awaitable per async with
         # Usiamo side_effect per assicurarci che si comporti come una funzione asincrona
-        mocker.patch("app.db.aiosqlite.connect", return_value=AsyncCM(mock_conn))
+        mocker.patch("feedflow.db.aiosqlite.connect", return_value=AsyncCM(mock_conn))
         
         return mock_conn
     return _setup_mock
