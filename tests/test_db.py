@@ -56,11 +56,11 @@ async def test_init_db(setup_database):
             assert result is not None, "The index on 'category' was not created."
 
 
-async def test_add_custom_feed(setup_database):
+async def test_add_feed(setup_database):
     """
     Tests adding a feed to the database.
     """
-    result_msg = await db_module._add_custom_feed(
+    result_msg = await db_module._add_feed(
         name="TechCrunch",
         url="https://techcrunch.com/feed/",
         category="Tech",
@@ -80,7 +80,7 @@ async def test_add_custom_feed(setup_database):
 
 async def test_remove_feed(setup_database):
     async with aiosqlite.connect(setup_database) as db:
-        await db_module._add_custom_feed("Test", "https://test.com", "Tech", "en")
+        await db_module._add_feed("Test", "https://test.com", "Tech", "en")
     
     assert await db_module._remove_feed("https://test.com") is True
     assert await db_module._remove_feed("https://test.com") is False
@@ -90,16 +90,16 @@ async def test_get_feeds_empty(setup_database):
     Tests getting feeds when the database is empty.
     """
     result = await db_module._get_feeds()
-    assert result == "No feeds configured. Use the 'add_custom_feed' tool to add some!"
+    assert result == "No feeds configured. Use the 'add_feed' tool to add some!"
 
 
 async def test_get_feeds_with_data(setup_database):
     """
     Tests getting all feeds and feeds filtered by category.
     """
-    await db_module._add_custom_feed("Feed 1", "url1", "Cat A", "en")
-    await db_module._add_custom_feed("Feed 2", "url2", "Cat B", "es")
-    await db_module._add_custom_feed("Feed 3", "url3", "Cat A", "fr")
+    await db_module._add_feed("Feed 1", "url1", "Cat A", "en")
+    await db_module._add_feed("Feed 2", "url2", "Cat B", "es")
+    await db_module._add_feed("Feed 3", "url3", "Cat A", "fr")
     
     # Test getting all feeds
     all_feeds = await db_module._get_feeds()
@@ -129,9 +129,9 @@ async def test_get_categories(setup_database):
     assert categories == []
     
     # Add data and test again
-    await db_module._add_custom_feed("Feed 1", "url1", "Tech", "en")
-    await db_module._add_custom_feed("Feed 2", "url2", "AI", "en")
-    await db_module._add_custom_feed("Feed 3", "url3", "Tech", "en") # Duplicate category
+    await db_module._add_feed("Feed 1", "url1", "Tech", "en")
+    await db_module._add_feed("Feed 2", "url2", "AI", "en")
+    await db_module._add_feed("Feed 3", "url3", "Tech", "en") # Duplicate category
     
     categories = await db_module._get_categories()
     assert len(categories) == 2
@@ -144,8 +144,8 @@ async def test_get_feeds_exception_mock(mock_get_feeds_error):
     
     assert "Error while getting feeds: DB Connection Lost" in result
 
-async def test_add_custom_feed_exception_mock(mock_db_error):
-    result = await db_module._add_custom_feed("Test", "https://test.com", "Tech", "en", ctx=None)
+async def test_add_feed_exception_mock(mock_db_error):
+    result = await db_module._add_feed("Test", "https://test.com", "Tech", "en", ctx=None)
      
     assert "Error adding feed:" in result
     

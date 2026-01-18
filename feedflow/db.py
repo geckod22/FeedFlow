@@ -43,7 +43,7 @@ async def _get_categories(ctx: Context = None) -> list[str]:
             rows = await cursor.fetchall()
             return [row[0] for row in rows]
 
-async def _add_custom_feed(name: str, url: str, category: str, lang: str, ctx: Context = None) -> str:
+async def _add_feed(name: str, url: str, category: str, lang: str, ctx: Context = None) -> str:
     """
     Adds a new RSS feed to the Feed list persistently.
     Returns a success or error formatted string message.
@@ -137,7 +137,7 @@ async def _get_feeds(ctx: Context = None, category: str = None) -> str:
             if category:
                 return f"No feeds found in the '{category}' category."
             else:
-             return "No feeds configured. Use the 'add_custom_feed' tool to add some!" 
+             return "No feeds configured. Use the 'add_feed' tool to add some!" 
 
         output = "CURRENT FEEDS:\n"
         count = 0

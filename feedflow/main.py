@@ -1,23 +1,31 @@
 import logging
 import sys
+from importlib.metadata import version, PackageNotFoundError
 from fastmcp import FastMCP, Context
 from mcp.types import PromptMessage, TextContent
 from pydantic import TypeAdapter, HttpUrl, Field
 from typing import Optional
 try: 
-    from .db import _add_custom_feed, _get_feeds, init_db, _get_categories, _remove_feed
+    from .db import _add_feed, _get_feeds, init_db, _get_categories, _remove_feed
     from .rss_engine import _fetch_rss_feed
 except (ImportError, ValueError):# pragma: no cover
-    from db import _add_custom_feed, _get_feeds, init_db, _get_categories, _remove_feed # pragma: no cover
+    from db import _add_feed, _get_feeds, init_db, _get_categories, _remove_feed # pragma: no cover
     from rss_engine import _fetch_rss_feed  # pragma: no cover
 
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
 logger = logging.getLogger(__name__)
 
+# Get version from metadata (the name must match the one in pyproject.toml)
+try:
+    __version__ = version("feedflow")
+except PackageNotFoundError:
+    # Fallback if the package is not installed (e.g., during local development)
+    __version__ = "0.0.0-dev" # pragma: no cover
+    
 # Init the server
 mcp = FastMCP(
     name="FeedFlow",
-    version="1.0.0",
+    version=__version__,
     instructions="""
         This stdio mcp help getting feeds summary.
     """
@@ -113,7 +121,7 @@ async def latest_news_by_argument(
 
 # --- TOOLS ---
 @mcp.tool()
-async def add_custom_feed(
+async def add_feed(
     url: str,
     name: str = Field(..., description="The name of the feed. If no name or title is provided use the website domain name from the provided url"),
     category: str = "General",
@@ -130,7 +138,7 @@ async def add_custom_feed(
         if ctx: await ctx.error(f"Invalid URL: {str(e)}")
         return f"Error adding feed: {str(e)}"
     
-    return await _add_custom_feed(name, url, category, lang, ctx)
+    return await _add_feed(name, url, category, lang, ctx)
 
 @mcp.tool()
 async def remove_feed(

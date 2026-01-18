@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="app/logo.png" alt="FeedFlow Logo" height="100" />
+	<img src="feedflow/logo.png" alt="FeedFlow Logo" height="100" />
 </p>
 <div align="center">
 	<h1>FeedFlow MCP Server</h1>
@@ -11,7 +11,7 @@
 ![Supported Python Versions](https://img.shields.io/badge/Python-3.13%20|%20or%20higher-3776AB?logo=python&logoColor=fff)
 [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 ![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)
-![Coverage](coverage.svg)
+![Coverage](coverage.svg) ![Tests](tests.svg)
 </div>
 
 ---
@@ -37,21 +37,29 @@ FeedFlow is a `stdio`-based [FastMCP](https://github.com/mcp-client/fastmcp) ser
 - Python 3.13+
 - [uv](https://github.com/astral-sh/uv) (for installing dependencies from `uv.lock`)
 
-## Installation
+## 📦 Installation & 📋 Usage
 
+### 🚀 Quick Start (No Download Required)
+You can run FeedFlow directly without cloning the repository using `uvx`:
+```bash
+uvx --from git+[https://github.com/geckod22/FeedFlow](https://github.com/geckod22/FeedFlow) feedflow
+```
+
+### 🛠️ Developer Setup
 1.  **Clone the repository:**
     ```bash
-    git clone <your-repository-url>
+    git clone https://github.com/geckod22/FeedFlow
     cd FeedFlow
     ```
 
-2.  **Install dependencies:**
-    This project uses `uv` to manage dependencies. To install them, run:
+2.  **Install in editable mode:**
+    This project uses uv. To set up a virtual environment and install all dependencies (including test tools):
     ```bash
     uv sync
+	uv pip install -e .
     ```
 
-## MCP Client configuration
+## ⚙️ MCP Client configuration
 
 Fast implementation (No Download):
 ```json
@@ -79,21 +87,21 @@ Standard config:
 | Gemini CLI             | <a href="https://github.com/google-gemini/gemini-cli/blob/main/docs/tools/mcp-server.md#how-to-set-up-your-mcp-server">here</a>    |
 | Windsurf               | <a href="https://docs.windsurf.com/windsurf/cascade/mcp#mcp-config-json">here</a> |
 
-## Available Tools & Resources
+## 🛠️ Available Tools & Resources
 
-### Resources
+### 📦 Resources
 
 - **`feeds://feeds`**: Returns a list of all configured RSS feeds.
 - **`feeds://categories`**: Returns a list of all unique feed categories.
 - **`feeds://feeds/{category}`**: Returns a list of RSS feeds filtered by a specific category.
 
-### Prompts
+### 💬 Prompts
 
 - **`available_feeds_categories`**: Returns a list of all unique feed categories. 
 
-### Tools
+### 🔧 Tools
 
-#### `add_custom_feed`
+#### `add_feed`
 Adds a new RSS feed to the database.
 
 - **Parameters:**
@@ -121,37 +129,37 @@ Fetches and displays the latest articles from a given RSS feed URL.
   - `url` (str, required): The URL of the RSS feed to fetch.
   - `max_results` (int, optional): The maximum number of articles to return (default: 5, max: 10).
 
-## Test with modelcontextprotocol/inspector
+## 🔍 Test with modelcontextprotocol/inspector
 
 from the project folder run:
 
 ```bash
-npx @modelcontextprotocol/inspector uv run --with httpx --with aiosqlite --with fastmcp --with feedparser --with langdetect python feedflow/main.py
+npx @modelcontextprotocol/inspector uv run feedflow
 
 ```
 
-## Running Tests
+## 🧪 Running Tests
 
 To run the test suite, use `pytest`:
 
 ```bash
-pytest
+uv run pytest
 ```
 
 with coverage
 
 ```bash
-pytest --cov=. --cov-report=html
+uv run pytest --cov=feedflow --cov-report=html
 ```
 
 for coverage badge
 
 ```bash
-pytest --cov=. --cov-report=html --local-badge-output-dir .
+uv run pytest --cov=feedflow --local-badge-output-dir .
 ```
 
-## License
+## 📄 License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Contributing
+## 🤝 Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests to improve the project.
